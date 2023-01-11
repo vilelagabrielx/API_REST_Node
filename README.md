@@ -1,4 +1,4 @@
 # REST API using NodeJS
-As part of my studies, I developed a Node.js and MySQL-based API for managing partners. This API allows users to search for partners by id and it has several functionalities such as creating, reading, and deleting partners. 
-This challenge was proposed in the following repository: https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md"
+Como parte de meus estudos, desenvolvi uma API baseada em Node.js e MySQL. Essa API permite que os usuários pesquisem parceiros por id e possui diversas funcionalidades como criação, leitura e exclusão de parceiros.
+Este desafio foi proposto no seguinte repositório: https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md"
  
