@@ -2,6 +2,7 @@ const express = require('express'); // Importa o módulo 'express'
 const winston = require('winston'); // Importa o módulo 'winston' para tratamento de logs
 const DailyRotateFile = require('winston-daily-rotate-file');
 const app = express(); // Cria uma instância do express
+require('dotenv').config({ path: 'config/.env' });
 const PORT = process.env.SERVER_PORT; // Define a porta em que a aplicação será executada
 const routes = require('./src/routes/partner'); // Importa o módulo de rotas
                                                // O módulo de rotas é um conjunto de rotas que foram definidas para lidar 
@@ -9,7 +10,7 @@ const routes = require('./src/routes/partner'); // Importa o módulo de rotas
 
 const moment = require('moment'); //importa a biblioteca de tratamento de tempos
 
-require('dotenv').config({ path: 'config/.env' });
+
 
 // Configura o logger para gravar os logs em arquivos separados diariamente, 
 //além de imprimir os logs no console
