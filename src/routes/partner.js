@@ -16,6 +16,13 @@ const router = express.Router();
 //bibliotecas para verificação do padrão GeoJSON
 const { isMultiPolygon, isPoint } = require('geojson-validation');
 
+
+// Importa o módulo 'AddPartner para inserir novos parceiros'
+const AddPartner = require('../controllers/Partner/Addpartner');
+
+// Importa o módulo 'AddPartner para buscar parceiros'
+const GetPartner = require('../controllers/Partner/Getpartner');
+
 const logger = winston.createLogger({
   level: 'info', //nivel de log
 
@@ -43,8 +50,7 @@ const logger = winston.createLogger({
               ]
 });
 
-// Importa o módulo 'Partner'
-const Partner = require('../controllers/partner');
+
 
 // Cria uma rota para a URL raiz, que responde a requisições do tipo GET
 router.get('/', (req, res) => {
@@ -70,18 +76,18 @@ router.post('/createapartner', async(req, res) => {
     }
     // Se nenhum dos erros acima for disparado, retorna uma resposta de status HTTP 202
     
-    else if(!isMultiPolygon(coverageArea.coordinates)){ //caso as cordanadas de coverageArea não sigam o padrão MultiPolygon
+    else if(!isMultiPolygon(coverageArea)){ //caso as cordenadas de coverageArea não sigam o padrão MultiPolygon
                                                   //retorno um erro 
-      res.status(400).send('coverageArea deve seguir o padrão GeoJSON MultiPolygon') 
+      res.status(400).send({error:'coverageArea deve seguir o padrão GeoJSON MultiPolygon'}) 
     }
-    else if (!isPoint(address.coordinates)) {
-      res.status(400).send('address deve seguir o padrão GeoJSON Point');
+    else if (!isPoint(address)) {
+      res.status(400).send({error:'address deve seguir o padrão GeoJSON Point'});
     } 
     
     else{
       try {
   
-        const partner = new Partner(tradingName, ownerName, document, coverageArea, address);
+        const partner = new AddPartner(tradingName, ownerName, document, coverageArea, address);
         
         // Salva o parceiro no banco de dados
         const partnerId = await partner.savePartner();
@@ -110,5 +116,24 @@ router.post('/createapartner', async(req, res) => {
        
 }
 });
-  
+
+router.get('/getpartnerbyID/:id', async (req, res) => {
+  const ID = req.params.id;
+  try {
+  const getPartner = new GetPartner(ID)
+  let result = await getPartner.getPartnerByID(ID);
+  if (result ==false){
+    result = 'Nenhum parceiro com este ID'
+    res.json(result)
+  }
+  else{
+    res.json(result);
+  }
+
+  }
+  catch (error) {
+    res.json(error);
+  }
+ 
+});
 module.exports = router; // Exporta o roteador de rotas

@@ -1,6 +1,6 @@
 const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
-const Database = require('../models/database'); // Importa o módulo de banco de dados
+const Database = require('../../models/database'); // Importa o módulo de banco de dados
 const moment = require('moment');
 require('dotenv').config({ path: './config/.env' });
 const host = process.env.DB_HOST;
@@ -75,7 +75,9 @@ class Partner {
       
       // Insere o parceiro na tabela t_coverageArea
       await db.createCoverageArea(partnerId, this.coverageArea.type, JSON.stringify(this.coverageArea.coordinates[0]), JSON.stringify(this.coverageArea.coordinates[1]));
-  
+      
+      // Insere o parceiro na tabela t_adress
+      await db.createAdress(partnerId,this.address.type, JSON.stringify(this.address.coordinates[0]), JSON.stringify(this.address.coordinates[1]));
       // Retorna o status 201 (Created)
       return '201';
     } catch (Error) {

@@ -189,6 +189,61 @@ async getPartnerByDocument(document) {
   }
 }
 
+async getPartnerByID(ID) {
+  // Monta a query SQL de seleção de parceiro pelo documento
+  const sql = `
+  select 
+    tradingName ,
+    ownerName ,
+    document  ,
+    tca.type ,
+    tca.coordinateX as coverageAreacoordinateX ,
+    tca.coordinateY as coverageAreacoordinateY,
+    ta.type ,
+    ta.coordinateX as addresscoordinateX,
+    ta.coordinateY as addresscoordinateY
+from t_partner tp 
+inner join t_coverageArea tca on
+	tp.Id = tca.idpartner 
+inner join t_address ta on
+	ta.idpartner = tp.Id
+  WHERE tp.Id = ?`;
+
+  try {
+    // Executa a query e obtém o resultado
+    const connection = await this.getConnection();
+    const [rows, fields]  = await connection.query(sql,[ID]);
+
+    // RETORNA O JSON
+    if (rows.length > 0) {
+      const data = {
+        "id":ID, 
+        "tradingName": rows[0].tradingName,
+        "ownerName": rows[0].ownerName,
+        "document": rows[0].document,
+        "coverageArea": { 
+          "type": rows[0].coverageAreaType, 
+          "coordinates": [[[rows[0].coverageAreacoordinateX, rows[0].coverageAreacoordinateY]]]
+        },
+        "address": { 
+          "type": rows[0].addressType,
+          "coordinates": [rows[0].addresscoordinateX, rows[0].addresscoordinateY]
+        }
+      }
+      return data
+    }
+    else{
+
+    return false
+
+    }
+   
+  } catch(error) {
+    // console.error(error);
+    throw error;
+  }
+}
+
 
 
 
