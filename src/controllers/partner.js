@@ -2,7 +2,7 @@ const winston = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
 const Database = require('../models/database'); // Importa o módulo de banco de dados
 const moment = require('moment');
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: './config/.env' });
 const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASS;
