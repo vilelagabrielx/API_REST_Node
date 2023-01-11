@@ -13,6 +13,9 @@ const moment = require('moment');
 // Cria uma instância de um roteador de rotas do express
 const router = express.Router();
 
+//bibliotecas para verificação do padrão GeoJSON
+const { isMultiPolygon, isPoint } = require('geojson-validation');
+
 const logger = winston.createLogger({
   level: 'info', //nivel de log
 
@@ -61,11 +64,20 @@ router.post('/createapartner', async(req, res) => {
       return res.status(400).send({ error: 'Dados incorretos ou incompletos' }); // Se algum dos valores estiver faltando, retorna um erro com o status HTTP 400
     }
    
-    if (!coverageArea.type || !coverageArea.coordinates || !address.type || !address.coordinates) {  // Verifica se os objetos coverageArea e address têm os campos type e coordinates
+    else if (!coverageArea.type || !coverageArea.coordinates || !address.type || !address.coordinates) {  // Verifica se os objetos coverageArea e address têm os campos type e coordinates
       // Se algum desses campos estiver faltando, retorna um erro com o status HTTP 400
       return res.status(400).send({ error: 'Dados de coverageArea ou adress incorretos ou incompletos' });
     }
     // Se nenhum dos erros acima for disparado, retorna uma resposta de status HTTP 202
+    
+    else if(!isMultiPolygon(coverageArea.coordinates)){ //caso as cordanadas de coverageArea não sigam o padrão MultiPolygon
+                                                  //retorno um erro 
+      res.status(400).send('coverageArea deve seguir o padrão GeoJSON MultiPolygon') 
+    }
+    else if (!isPoint(address.coordinates)) {
+      res.status(400).send('address deve seguir o padrão GeoJSON Point');
+    } 
+    
     else{
       try {
   
