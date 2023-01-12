@@ -10,7 +10,40 @@ const routes = require('./src/routes/partner'); // Importa o módulo de rotas
 
 const moment = require('moment'); //importa a biblioteca de tratamento de tempos
 
+const path = require('path');
 
+const fs = require('fs-extra');
+
+function deleteOldFiles(pathtofolder) {
+  // Define a data de ontem
+  pathtofolder = process.cwd() + pathtofolder  
+  console.log(pathtofolder)
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // Obtém a lista de todos os arquivos na pasta
+  const files = fs.readdirSync(pathtofolder);
+
+  // Percorre cada arquivo
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    // Obtém a data de modificação do arquivo
+    const stat = fs.statSync(path.join(pathtofolder, file));
+    const mtime = new Date(stat.mtime);
+    console.log(mtime)
+    // Verifica se o arquivo foi modificado antes de ontem
+    if (mtime < yesterday) {
+      // Verifica se é um arquivo de texto ou json
+      if (file.endsWith('.txt') || file.endsWith('.json')) {
+        // Apaga o arquivo
+        fs.unlinkSync(path.join(pathtofolder, file));
+      }
+    }
+  }
+}
+
+
+deleteOldFiles('\\logs')
 
 // Configura o logger para gravar os logs em arquivos separados diariamente, 
 //além de imprimir os logs no console
@@ -30,16 +63,23 @@ const logger = winston.createLogger({
                              
   new DailyRotateFile({
 
-  filename: 'log-%DATE%.txt', //nome do arquivo
+    filename: 'log-%DATE%.txt',
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '20m',
+    maxFiles: '1d',
+    dirname: 'logs',
+    zippedArchive: true,
+    maxDays: '14d',
+    cleanup: true
 
-  datePattern: 'YYYY-MM-DD', //formato da data
-
-  maxSize: '20m', //tamanho maximo
-
-  maxFiles: '2d' //dias limite de armazenamento de log
                       })
               ]
 });
+
+
+
+
+
 //A linha app.use(express.json()) é usada para habilitar o middleware 
 //do express para parsing de JSON. Isso significa que, quando uma solicitação é 
 //feita com um corpo em formato JSON, o *middleware irá converter esse corpo em um objeto 
