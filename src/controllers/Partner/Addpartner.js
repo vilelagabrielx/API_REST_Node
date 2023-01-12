@@ -55,7 +55,7 @@ const db = new Database(
       await db.getConnection();
   } catch (Error) {
       date = now.format('dd/mm/yyyy hh:mm:ss');
-      logger.info(`${date} - Erro ao conectar no banco de dados logo no inicio - ${Error}`);
+      logger.info(`${date} - Erro ao conectar no banco de dados - ${Error}`);
   }
   
   try {
