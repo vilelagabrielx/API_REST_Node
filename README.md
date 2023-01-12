@@ -6,7 +6,7 @@ Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https:
 
 A API oferece as seguintes funcionalidades:
 - Pesquisa de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyID*** passando o ID do usuário, os dados do mesmo são retornados em um JSON.
-  - Exemplo de Request para obter dados de um usuário de ID 1 : ***http://localhost:3000/getpartnerbyID/1***
+  - Exemplo de Request para obter dados de um usuário de ID 1 : ***http://localhost:3000/getpartnerbyid/1***
   
 - Formato do JSON obtido:
        
