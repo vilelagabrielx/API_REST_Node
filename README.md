@@ -56,7 +56,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 ```json
 {
   "id": 1, 
-  "tradingName": "Adega da Cerveja - Pinheiros",
+  "tradingName": "cervejas",
   "ownerName": "Zé da Silva",
   "document": "1432132123891/0001",
   "coverageArea": { 
@@ -73,8 +73,63 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 }
 ```   
    - Para atualização, é necessário realizar uma requisição do tipo *POST* na rota ***/updatepartner*** passando o ID do mesmo. No corpo da requisição, 
-    é necessário que um JSON com todas as colunas, incluindo as que não serão modificadas seja enviado, respeitando todas as regras anteriores.
+    é necessário que um JSON com todas as colunas *COM EXCEÇÃO DA COLUNA ID, QUE SERÁ PASSADO NA REQUISIÇÃO*, incluindo as que não serão modificadas seja enviado, respeitando todas as regras anteriores.
       - Exemplo de Request para Atualização dados de um usuário de ID 1 : ***http://localhost:3000/updatepartner/1***
+ ```json
+ {
+  "tradingName": "cervejas",
+  "ownerName": "sonic do JORGE",
+  "document": "40028922",
+  "coverageArea": { 
+    "type": "MultiPolygon", 
+    "coordinates": [
+        
+    
+      [ [
+            [
+              -43.70807012320802,
+              -22.635060152555525
+            ],
+            [
+              -43.680926754499666,
+              -22.636565072818087
+            ],
+            [
+              -43.695409610781354,
+              -22.61204165978151
+            ],
+            [
+              -43.70807012320802,
+              -22.635060152555525
+            ]
+          ]],
+      [[
+            [
+              -43.701739865845184,
+              -22.617265424837953
+            ],
+            [
+              -43.72495080107814,
+              -22.60584371513221
+            ],
+            [
+              -43.72159384763509,
+              -22.630102648431688
+            ],
+            [
+              -43.701739865845184,
+              -22.617265424837953
+            ]
+          ]]
+    ]
+  },
+  "address": { 
+    "type": "Point",
+    "coordinates": [-43.698233379914444, -22.627960730496646]
+  }
+}
+
+```
     
 - Busca de parceiros próximos de um ponto(LATITUDE E LONGITUDE)
   - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getnearestpartnerbycoordenates***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
