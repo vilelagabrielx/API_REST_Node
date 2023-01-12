@@ -78,7 +78,20 @@ const db = new Database(
     date = now.format('dd/mm/yyyy hh:mm:ss');
       logger.info(`${date} - Erro ao criar tabela de endereços - ${Error}`);
   }
-        
+  
+  try {
+    await db.createAddressTable(true); 
+} catch (Error) {
+  date = now.format('dd/mm/yyyy hh:mm:ss');
+    logger.info(`${date} - Erro ao criar tabela de endereços - ${Error}`);
+}
+try {
+  await db.createUpdateProcedure(true); 
+} catch (Error) {
+date = now.format('dd/mm/yyyy hh:mm:ss');
+  logger.info(`${date} - Erro ao criar procedure de update das tabelas - ${Error}`);
+}
+
   } catch (Error) {
     date = now.format('dd/mm/yyyy hh:mm:ss');
     logger.info(`${date} - Controller/partner.js - Erro ao executar operações iniciais no banco de dados - ${Error}`)

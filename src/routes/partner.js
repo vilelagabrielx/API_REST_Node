@@ -25,6 +25,8 @@ const GetPartner = require('../controllers/Partner/Getpartner');
 
 const Deletepartner = require('../controllers/Partner/Deletepartner');
 
+const UpdatePartner = require('../controllers/Partner/UpdatePartner');
+
 const logger = winston.createLogger({
   level: 'info', //nivel de log
 
@@ -185,5 +187,78 @@ router.get('/deleteapartner/:id', async (req, res) => {
   }
  
 });
+
+router.post('/updatepartner/:id', async (req, res) => {
+  const ID = req.params.id;
+  try {
+  const getPartner = new GetPartner(ID);
+  let result = await getPartner.getPartnerByID(ID);
+  if (result ==false){
+    result = 'Nenhum parceiro com este ID'
+    res.json(result)
+  }
+  else{
+    const {tradingName, ownerName, document, coverageArea, address } = req.body;  // Extrai os valores do corpo da solicitação
+
+    
+    if (!tradingName || !ownerName || !document || !coverageArea || !address) { // Verifica se os valores foram fornecidos
+      
+      return res.status(400).send({ error: 'Dados incorretos ou incompletos' }); // Se algum dos valores estiver faltando, retorna um erro com o status HTTP 400
+    }
+   
+    else if (!coverageArea.type || !coverageArea.coordinates || !address.type || !address.coordinates) {  // Verifica se os objetos coverageArea e address têm os campos type e coordinates
+      // Se algum desses campos estiver faltando, retorna um erro com o status HTTP 400
+      return res.status(400).send({ error: 'Dados de coverageArea ou adress incorretos ou incompletos' });
+    }
+    // Se nenhum dos erros acima for disparado, retorna uma resposta de status HTTP 202
+    
+    else if(!isMultiPolygon(coverageArea)){ //caso as cordenadas de coverageArea não sigam o padrão MultiPolygon
+                                                  //retorno um erro 
+      res.status(400).send({error:'coverageArea deve seguir o padrão GeoJSON MultiPolygon'}) 
+    }
+    else if (!isPoint(address)) {
+      res.status(400).send({error:'address deve seguir o padrão GeoJSON Point'});
+    } 
+    
+    else{
+      try {
+
+        const partner = new UpdatePartner();
+        
+        // Salva o parceiro no banco de dados
+        const partnerId = await partner.UpdatePartner(ID,tradingName, ownerName, document, coverageArea, address);
+        if(partnerId == false){
+          res.status(400).send({ status: partnerId});
+        }else{
+          res.status(201).send({ status: 'atualizado com sucesso' });
+        }
+        // Envia uma resposta de sucesso para o cliente
+        
+      }
+      // Caso ocorra um erro ao tentar criar o parceiro, captura a exceção e envia uma resposta de erro para o cliente
+      catch (error) {
+        // Obtém a data e hora atual
+        const now = moment();
+      
+        // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"
+        const date = now.format('dd/mm/yyyy hh:mm:ss');
+      
+        // Grava uma mensagem de erro no arquivo de log
+        logger.info(`${date} - routes/partner.js - Erro ao tentar executar a inserção no banco de dados: ${error}`);
+      
+        // Envia uma resposta de erro para o cliente
+        
+      }
+       
+}
+  }
+
+  }
+  catch (error) {
+    res.json(error);
+  }
+ 
+}
+);
 
 module.exports = router; // Exporta o roteador de rotas
