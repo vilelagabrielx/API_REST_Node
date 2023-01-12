@@ -23,6 +23,8 @@ const AddPartner = require('../controllers/Partner/Addpartner');
 // Importa o módulo 'AddPartner para buscar parceiros'
 const GetPartner = require('../controllers/Partner/Getpartner');
 
+const Deletepartner = require('../controllers/Partner/Deletepartner');
+
 const logger = winston.createLogger({
   level: 'info', //nivel de log
 
@@ -117,7 +119,7 @@ router.post('/createapartner', async(req, res) => {
 }
 });
 
-router.get('/getpartnerbyID/:id', async (req, res) => {
+router.get('/getpartnerbyid/:id', async (req, res) => {
   const ID = req.params.id;
   try {
   const getPartner = new GetPartner(ID);
@@ -137,7 +139,7 @@ router.get('/getpartnerbyID/:id', async (req, res) => {
  
 });
 
-router.get('/getNearestPartnerByCOORDENATES', async (req, res) => {
+router.get('/getnearestpartnerbycoordenates', async (req, res) => {
   const X = req.body['X'];
   const Y =  req.body['Y'];
   
@@ -160,4 +162,28 @@ router.get('/getNearestPartnerByCOORDENATES', async (req, res) => {
   }
  
 });
+
+router.get('/deleteapartner/:id', async (req, res) => {
+  const ID = req.params.id;
+  try {
+    const deletepartner = new Deletepartner();
+  
+    let result = await deletepartner.DeletePartnerByID(ID);
+
+    if (result ==0){
+      result = 'Nenhum parceiro com este ID'
+      res.json(result)
+    }
+    else{
+      rows = `${result} parceiro removidos`
+      res.json(rows);
+    }
+
+  }
+  catch (error) {
+    res.json(error);
+  }
+ 
+});
+
 module.exports = router; // Exporta o roteador de rotas
