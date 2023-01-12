@@ -1,4 +1,4 @@
-# REST API usando NodeJS
+# REST API EM NodeJS
 Como parte de meus estudos, desenvolvi uma API REST baseada em Node.js e utilizando MySQL como banco de dados.
 Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md) e me permitiu aprimorar diversas habilidades.
 
