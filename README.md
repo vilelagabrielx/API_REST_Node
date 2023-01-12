@@ -2,6 +2,8 @@
 Como parte de meus estudos, desenvolvi uma API REST baseada em Node.js e utilizando MySQL como banco de dados.
 Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md) e me permitiu aprimorar diversas habilidades.
 
+#FUNCIONALIDADES
+
 A API oferece as seguintes funcionalidades:
 - Pesquisa de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyID*** passando o ID do usuário, os dados do mesmo são retornados em um JSON.
   - Exemplo de Request para obter dados de um usuário de ID 1 : ***http://localhost:3000/getpartnerbyID/1***
@@ -138,3 +140,5 @@ A API oferece as seguintes funcionalidades:
     }
 }
 ```
+
+#INSTALAÇÃO
