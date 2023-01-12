@@ -26,6 +26,7 @@ class Database {
     // Retorna a conexão criada
     return this.connection;
   }
+  
   async createPool(){
     this.connection = await mysql2.createPool({
       host: this.host,
@@ -44,7 +45,7 @@ class Database {
         type TEXT NOT NULL,
         cordinateGeoJSON TEXT NOT NULL,
         idpartner INTEGER,
-        FOREIGN KEY (idpartner) REFERENCES t_partner(Id)
+        FOREIGN KEY (idpartner) REFERENCES t_partner(Id) on DELETE CASCADE
       );
     `;
   
@@ -68,7 +69,7 @@ class Database {
         coordinateX TEXT NOT NULL, 
         coordinateY TEXT NOT NULL, 
         idpartner INTEGER, 
-        FOREIGN KEY (idpartner) REFERENCES t_partner(Id) );` ;
+        FOREIGN KEY (idpartner) REFERENCES t_partner(Id) on DELETE CASCADE );` ;
     
     try {
     // Obtém a conexão com o banco de dados
@@ -243,6 +244,26 @@ async getPartnerByID(ID) {
     return false
 
     }
+   
+  } catch(error) {
+    // console.error(error);
+    throw error;
+  }
+}
+
+async DeletePartnerByID(ID) {
+  // Monta a query SQL de seleção de parceiro pelo documento
+  const sql = `
+  DELETE FROM t_partner WHERE id = ${ID};
+  `;
+
+  try {
+    // Executa a query e obtém o resultado
+    const connection = await this.getConnection();
+    const rows  = await connection.query(sql);
+    
+    return rows[0].affectedRows
+    // RETORNA O JSON
    
   } catch(error) {
     // console.error(error);
