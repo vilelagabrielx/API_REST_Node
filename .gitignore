@@ -127,3 +127,4 @@ dist
 .pnp.*
 *.txt
 *.json
+*.log
