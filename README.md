@@ -72,3 +72,69 @@ A API oferece as seguintes funcionalidades:
 }
 
 ```
+  - Caso algum parceira tenha o ponto específico como área de cobertura, um JSON no seguinte formato é retornado:
+```json
+{
+    "id": 2,
+    "tradingName": "Adega da Cerveja - Pinheiros",
+    "ownerName": "Fausto Silva",
+    "document": "14a3203323a7aa13a83d93aa114a112aaaa/a0aa00s1",
+    "coverageArea": {
+        "type": "MultiPolygon",
+        "coordinates": [
+            [
+                [
+                    [
+                        -43.70807012320802,
+                        -22.635060152555525
+                    ],
+                    [
+                        -43.680926754499666,
+                        -22.636565072818087
+                    ],
+                    [
+                        -43.695409610781354,
+                        -22.61204165978151
+                    ],
+                    [
+                        -43.70807012320802,
+                        -22.635060152555525
+                    ]
+                ]
+            ],
+            [
+                [
+                    [
+                        -43.701739865845184,
+                        -22.617265424837953
+                    ],
+                    [
+                        -43.72495080107814,
+                        -22.60584371513221
+                    ],
+                    [
+                        -43.72159384763509,
+                        -22.630102648431688
+                    ],
+                    [
+                        -43.701739865845184,
+                        -22.617265424837953
+                    ]
+                ]
+            ]
+        ]
+    },
+    "address": {
+        "type": "Point",
+        "coordinates": [
+            "-43.698233379912004",
+            "-22.627960730496646"
+        ]
+    },
+    "distance": {
+        "Kilometers": 0.015434332038764376,
+        "Meters": 15.434332038764376,
+        "Earth radius considered(Meters)": 6371
+    }
+}
+```
