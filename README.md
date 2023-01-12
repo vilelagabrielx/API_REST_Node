@@ -132,7 +132,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 ```
     
 - Busca de parceiros próximos de um ponto(LATITUDE E LONGITUDE)
-  - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getnearestpartnerbycoordenates***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
+  - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getNearestPartnerByCOORDENATES***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
 ```json
 {
  "X": "-22.628472435058594",
