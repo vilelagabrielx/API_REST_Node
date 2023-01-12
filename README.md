@@ -2,10 +2,21 @@
 Como parte de meus estudos, desenvolvi uma API REST baseada em Node.js que utiliza MySQL como banco de dados.
 Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md) e me permitiu aprimorar diversas habilidades.
 
+## DESCRIÇÃO
+
+No desafio citado, foi proposta a criação de um serviço que disponibilize uma API REST ou GraphQL que implemente as seguintes funcionalidas:
+  
+    -Criação de novos parceiros em uma base de dados.
+  
+    -Carregamento de um parceiro pelo id.
+  
+    -Buscar do parceiro mais próximo, e que tenham área de atuação no ponto enviado, pelas coordenadas.
+  
+ Alem das funcionalidades propostas, adicionei a possibilidade de deleção e atualização de um parceiro.
+ 
 ## FUNCIONALIDADES
 
-A API oferece as seguintes funcionalidades:
-- Pesquisa de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyid*** passando o ID do usuário, os dados do mesmo são retornados em um JSON.
+- Busca de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyid*** passando o ID do usuário, os dados do mesmo,caso existam, são retornados em um JSON.
   - Exemplo de Request para obter dados de um usuário de ID 1 : ***http://localhost:3000/getpartnerbyid/1***
   
 - Formato do JSON obtido:
@@ -34,8 +45,8 @@ A API oferece as seguintes funcionalidades:
     
     - Para exclusão de um usuário específico, é necessário realizar uma requisição do tipo *GET* na rota ***/deleteapartner*** passando o ID do mesmo.
        - Exemplo de Request para deleção de um usuário de ID 1 : ***http://localhost:3000/deleteapartner/1***
-    - Para criação, basta realizar uma requisição *POST* à aplicação na seguinte rota : ***/createapartner*** e no corpo da requisição, 
-    é necessário que um JSON no formato à seguir seja passado. 
+    - Para criação, basta realizar uma requisição *POST* à aplicação na seguinte rota: ***/createapartner*** e no corpo da requisição, 
+    é necessário que um JSON no formato à seguir seja enviado. 
     
         ***PONTOS IMPORTANTES***:
        - As coordenadas da ***coverageArea*** precisam ser um MultiPolygon válido respeitando o formato GeoJSON MultiPolygon (https://en.wikipedia.org/wiki/GeoJSON)
@@ -62,11 +73,11 @@ A API oferece as seguintes funcionalidades:
 }
 ```   
    - Para atualização, é necessário realizar uma requisição do tipo *POST* na rota ***/updatepartner*** passando o ID do mesmo. No corpo da requisição, 
-    é necessário que um JSON com todas as colunas, incluindo as que não serão modificadas seja passado, respeitando todas as regras anteriores.
+    é necessário que um JSON com todas as colunas, incluindo as que não serão modificadas seja enviado, respeitando todas as regras anteriores.
       - Exemplo de Request para Atualização dados de um usuário de ID 1 : ***http://localhost:3000/updatepartner/1***
     
 - Busca de parceiros próximos de um ponto(LATITUDE E LONGITUDE)
-  - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getnearestpartnerbycoordenates***. No corpo da requisição, é necessário que um JSON no seguinte formato seja passado, onde "X" é a latitude e "Y" é a longitude:
+  - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getnearestpartnerbycoordenates***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
 ```json
 {
  "X": "-22.628472435058594",
