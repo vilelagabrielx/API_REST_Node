@@ -73,7 +73,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 }
 ```   
    - Para atualização, é necessário realizar uma requisição do tipo *POST* na rota ***/updatepartner*** passando o ID do mesmo. No corpo da requisição, 
-    é necessário que um JSON com todas as colunas *COM EXCEÇÃO DA COLUNA ID, QUE SERÁ PASSADO NA REQUISIÇÃO*, incluindo as que não serão modificadas seja enviado, respeitando todas as regras anteriores.
+    é necessário que um JSON com todas as colunas *COM EXCEÇÃO DA COLUNA ID, QUE SERÁ PASSADO NA REQUISIÇÃO*, incluindo as que não serão modificadas, seja enviado respeitando todas as regras anteriores.
       - Exemplo de Request para Atualização dados de um usuário de ID 1 : ***http://localhost:3000/updatepartner/1***
  ```json
  {
