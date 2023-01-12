@@ -26,6 +26,14 @@ class Database {
     // Retorna a conexão criada
     return this.connection;
   }
+  async createPool(){
+    this.connection = await mysql2.createPool({
+      host: this.host,
+      user: this.user,
+      password: this.password,
+      database: this.database
+    });
+  }
   
   // O método createCoverageAreaTable cria a tabela t_coverageArea no banco de dados, se ela ainda não existir
   async createCoverageAreaTable() {
@@ -34,8 +42,7 @@ class Database {
       CREATE TABLE IF NOT EXISTS t_coverageArea (
         Id INTEGER AUTO_INCREMENT PRIMARY KEY,
         type TEXT NOT NULL,
-        coordinateX TEXT NOT NULL,
-        coordinateY TEXT NOT NULL,
+        cordinateGeoJSON TEXT NOT NULL,
         idpartner INTEGER,
         FOREIGN KEY (idpartner) REFERENCES t_partner(Id)
       );
@@ -45,8 +52,6 @@ class Database {
       // Executa a query e obtém o resultado
       const connection = await this.getConnection();
       const [result] = await connection.query(sql);
-  
-      console.log('Tabela t_coverageArea criada com sucesso!');
       return result;
     } catch(error) {
       console.error(error);
@@ -59,8 +64,10 @@ class Database {
     const sql = `
       CREATE TABLE IF NOT EXISTS t_address ( 
         Id INTEGER AUTO_INCREMENT PRIMARY KEY, 
-        type TEXT NOT NULL, coordinateX TEXT NOT NULL, 
-        coordinateY TEXT NOT NULL, idpartner INTEGER, 
+        type TEXT NOT NULL, 
+        coordinateX TEXT NOT NULL, 
+        coordinateY TEXT NOT NULL, 
+        idpartner INTEGER, 
         FOREIGN KEY (idpartner) REFERENCES t_partner(Id) );` ;
     
     try {
@@ -68,7 +75,6 @@ class Database {
     const connection = await this.getConnection();
     // Executa a query e obtém o resultado
     const [result] = await connection.query(sql);
-    console.log('Tabela t_address criada com sucesso!');
     return result;
     } catch(error) {
     console.error(error);
@@ -89,7 +95,6 @@ class Database {
     try {
     const connection = await this.getConnection();
     const [result] = await connection.query(sql);
-    console.log('Tabela t_partner criada com sucesso!');
     return result;
     } catch (error) {
     console.error(error);
@@ -117,17 +122,17 @@ return result;
   }
 // ------------------------
   // O método createCoverageArea insere um novo registro na tabela t_coverageArea
-  async createCoverageArea(idpartner,type, coordinateX, coordinateY) {
+  async createCoverageArea(idpartner,type, cordinateGeoJSON) {
     // Monta a query SQL de inserção de nova área de cobertura
     const sql = `
-      INSERT INTO t_coverageArea (type, coordinateX, coordinateY, idpartner)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO t_coverageArea (type,cordinateGeoJSON, idpartner)
+      VALUES (?, ?, ?)
     `;
   
     try {
       // Executa a query e obtém o resultado
       const connection = await this.getConnection();
-      const [result] = await connection.query(sql, [type, coordinateX, coordinateY, idpartner]);
+      const [result] = await connection.query(sql, [type, cordinateGeoJSON, idpartner]);
   
       return result;
     } catch(error) {
@@ -197,17 +202,18 @@ async getPartnerByID(ID) {
     ownerName ,
     document  ,
     tca.type ,
-    tca.coordinateX as coverageAreacoordinateX ,
-    tca.coordinateY as coverageAreacoordinateY,
     ta.type ,
+    JSON_EXTRACT(tca.cordinateGeoJSON, '$.coordinates') as coordinates,
+    ta.Type as addressType,
     ta.coordinateX as addresscoordinateX,
     ta.coordinateY as addresscoordinateY
-from t_partner tp 
-inner join t_coverageArea tca on
-	tp.Id = tca.idpartner 
-inner join t_address ta on
-	ta.idpartner = tp.Id
-  WHERE tp.Id = ?`;
+  from t_partner tp 
+  inner join t_coverageArea tca on
+    tp.Id = tca.idpartner 
+  inner join t_address ta on
+    ta.idpartner = tp.Id
+  WHERE 
+    tp.Id = ?`;
 
   try {
     // Executa a query e obtém o resultado
@@ -223,7 +229,7 @@ inner join t_address ta on
         "document": rows[0].document,
         "coverageArea": { 
           "type": rows[0].coverageAreaType, 
-          "coordinates": [[[rows[0].coverageAreacoordinateX, rows[0].coverageAreacoordinateY]]]
+          "coordinates": rows[0].coordinates, 
         },
         "address": { 
           "type": rows[0].addressType,
@@ -243,6 +249,74 @@ inner join t_address ta on
     throw error;
   }
 }
+
+async getNearestPartnerByCOORDENATES(X,Y) {
+  // Monta a query SQL de seleção de parceiro pelo documento
+  const sql = `
+    SELECT 
+        p.id as partnerID,
+        p.tradingName as tradingName,
+        p.ownerName as ownerName,
+        p.document as document,
+        tca.type as coverageAreaType,
+        JSON_EXTRACT(tca.cordinateGeoJSON, '$.coordinates') as coordinates, 
+        ad.type as partnerAdressType, 
+        ad.coordinateX as partnerAdressX, 
+        ad.coordinateY as partnerAdressY,
+        ST_Distance_Sphere(POINT(${Y}, ${X}), 
+        POINT(ad.coordinateX, ad.coordinateY))/6371 as distance 
+    FROM t_address ad
+    inner join t_partner p on
+      ad.idpartner =p.Id 
+    inner join t_coverageArea tca on
+        tca.idpartner = p.Id
+      where
+          ST_Contains(ST_GeomFromGeoJSON(tca.cordinateGeoJSON), ST_GeomFromText(CONCAT('POINT(',${Y},' ',${X},')'),4326 )) = 1
+    ORDER BY 
+      distance ASC
+    LIMIT 1;
+    `;
+
+  try {
+    // Executa a query e obtém o resultado
+    const connection = await this.getConnection();
+    const [rows, fields]  = await connection.query(sql);
+
+    // RETORNA O JSON
+    if (rows.length > 0) {
+      const data = {
+        "id":rows[0].partnerID, 
+        "tradingName": rows[0].tradingName,
+        "ownerName": rows[0].ownerName,
+        "document": rows[0].document,
+        "coverageArea": { 
+          "type": rows[0].coverageAreaType, 
+          "coordinates": rows[0].coordinates,
+        },
+        "address": { 
+          "type": rows[0].partnerAdressType,
+          "coordinates": [rows[0].partnerAdressX, rows[0].partnerAdressY]
+        },
+        "distance":{
+         "Kilometers": rows[0].distance,
+         "Meters":  (rows[0].distance)*1000 ,
+         "Earth radius considered(Meters)" : 6371 
+        } 
+      }
+      return data
+    }
+    else{
+
+    return false
+
+    }
+   
+  } catch(error) {
+    // console.error(error);
+    throw error;
+  }
+}
+
 
 
 

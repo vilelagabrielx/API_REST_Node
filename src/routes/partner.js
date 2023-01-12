@@ -39,14 +39,14 @@ const logger = winston.createLogger({
                              
   new DailyRotateFile({
 
-  filename: 'log-%DATE%.txt', //nome do arquivo
-
-  datePattern: 'YYYY-MM-DD', //formato da data
-
-  maxSize: '20m', //tamanho maximo
-
-  maxFiles: '2d' //dias de armazenamento de log
-                      })
+    filename: 'log-%DATE%.txt',
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '20m',
+    maxFiles: '1d',
+    dirname: 'logs',
+    zippedArchive: true,
+    maxDays: '1d'
+})
               ]
 });
 
@@ -120,10 +120,34 @@ router.post('/createapartner', async(req, res) => {
 router.get('/getpartnerbyID/:id', async (req, res) => {
   const ID = req.params.id;
   try {
-  const getPartner = new GetPartner(ID)
+  const getPartner = new GetPartner(ID);
   let result = await getPartner.getPartnerByID(ID);
   if (result ==false){
     result = 'Nenhum parceiro com este ID'
+    res.json(result)
+  }
+  else{
+    res.json(result);
+  }
+
+  }
+  catch (error) {
+    res.json(error);
+  }
+ 
+});
+
+router.get('/getNearestPartnerByCOORDENATES', async (req, res) => {
+  const X = req.body['X'];
+  const Y =  req.body['Y'];
+  
+  try {
+  const getPartner = new GetPartner()
+
+  let result = await getPartner.getNearestPartnerByCOORDENATES(X,Y);
+
+  if (result ==false){
+    result = 'Nenhum parceiro Cobre a sua area'
     res.json(result)
   }
   else{

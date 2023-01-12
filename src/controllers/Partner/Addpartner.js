@@ -8,18 +8,41 @@ const user = process.env.DB_USER;
 const password = process.env.DB_PASS;
 const database = process.env.DB_NAME;
 
+let now = moment();
+
+let date = now.format('dd/mm/yyyy hh:mm:ss');
+
 const logger = winston.createLogger({
-  level: 'info',
+  level: 'info', //nivel de log
+
   transports: [
-    new winston.transports.Console(),
-    new DailyRotateFile({
-      filename: 'log-%DATE%.txt',
-      datePattern: 'YYYY-MM-DD'
-    })
-  ]
+
+  new winston.transports.Console(), // cria uma nova instância de 
+                                    //um transporte de log para o winston, 
+                                    //especificamente um transporte de log para a consola (terminal). Isso significa que, quando o logger é usado para gravar mensagens, as mensagens serão exibidas na consola (terminal) também
+
+
+// é necessário instanciar o módulo winston e o DailyRotateFile juntos para que o 
+//winston possa utilizar as funcionalidades do DailyRotateFile para rotacionar os arquivos de 
+//log diariamente.
+                             
+  new DailyRotateFile({
+
+    filename: 'log-%DATE%.txt',
+    datePattern: 'YYYY-MM-DD',
+    maxSize: '20m',
+    maxFiles: '1d',
+    dirname: 'logs',
+    zippedArchive: true,
+    maxDays: '14d'
+
+
+}
+  )
+              ]
 });
 // Cria uma instância do banco de dados e tenta estabelecer uma conexão
-// console.log(host)
+
 const db = new Database(
                           host, 
                           user, 
@@ -28,22 +51,46 @@ const db = new Database(
                         );
 (async () => {
   try {         
-        db.getConnection()              
-        db.createPartnerTable(true);        //Tenta criar as tabelas no banco de dados. 
-        db.createCoverageAreaTable(true);  
-        db.createAddressTable(true);       
-   
+    try {
+      await db.getConnection();
   } catch (Error) {
-    logger.info(`Controller/partner.js - Erro ao executar operações iniciais no banco de dados - ${Error}`)
+      date = now.format('dd/mm/yyyy hh:mm:ss');
+      logger.info(`${date} - Erro ao conectar no banco de dados logo no inicio - ${Error}`);
+  }
+  
+  try {
+      await db.createPartnerTable(true);
+  } catch (Error) {
+      date = now.format('dd/mm/yyyy hh:mm:ss');
+      logger.info(`${date} -Erro ao criar tabela de parceiros - ${Error}`);
+  }
+  
+  try {
+      await db.createCoverageAreaTable(true);
+  } catch (Error) {
+      date = now.format('dd/mm/yyyy hh:mm:ss');
+      logger.info(`${date} -Erro ao criar tabela de áreas de cobertura - ${Error}`);
+  }
+  
+  try {
+      await db.createAddressTable(true); 
+  } catch (Error) {
+    date = now.format('dd/mm/yyyy hh:mm:ss');
+      logger.info(`${date} - Erro ao criar tabela de endereços - ${Error}`);
+  }
+        
+  } catch (Error) {
+    date = now.format('dd/mm/yyyy hh:mm:ss');
+    logger.info(`${date} - Controller/partner.js - Erro ao executar operações iniciais no banco de dados - ${Error}`)
   } finally {
     if (db.connection) {
-  await db.connection.destroy();; //Quando a operação é finalizada, encerra a conexão com o banco de dados.
+  await db.connection.end(); //Quando a operação é finalizada, encerra a conexão com o banco de dados.
 }
 else{
   const now = moment();
       
         // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"
-        const date = now.format('dd/mm/yyyy hh:mm:ss');
+         date = now.format('dd/mm/yyyy hh:mm:ss');
       
   logger.info(`${date} - Controller/partner.js - Erro ao se conectar no banco de dados - ${Error}`)
 }
@@ -60,30 +107,33 @@ class Partner {
     this.address =address;
   }
   async savePartner() {
+    
     try {
-      db.getConnection();
-  
+      await db.createPool();
+      await db.getConnection();
+      
       // Verifica se já existe um parceiro com o mesmo documento
       const existingPartner = await db.getPartnerByDocument(this.document);
-      if (existingPartner == true) {
+      if (existingPartner.existingPartner == true) {
         throw new Error(`Já existe um parceiro com o documento ${this.document}`);
-      }
-  
+      }else{
       // Insere o novo parceiro
       const partnerResult = await db.createPartner(this.tradingName, this.ownerName,  this.document);
       const partnerId = partnerResult.insertId;
-      
-      // Insere o parceiro na tabela t_coverageArea
-      await db.createCoverageArea(partnerId, this.coverageArea.type, JSON.stringify(this.coverageArea.coordinates[0]), JSON.stringify(this.coverageArea.coordinates[1]));
+
+      const coordinates = this.coverageArea.coordinates
+    
+      await db.createCoverageArea(partnerId, this.coverageArea.type,  JSON.stringify(this.coverageArea));
       
       // Insere o parceiro na tabela t_adress
+      
       await db.createAdress(partnerId,this.address.type, JSON.stringify(this.address.coordinates[0]), JSON.stringify(this.address.coordinates[1]));
       // Retorna o status 201 (Created)
-      return '201';
-    } catch (Error) {
+      return 201
+    }} catch (Error) {
       // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"
       const now = moment();
-      const date = now.format('dd/mm/yyyy hh:mm:ss');
+      date = now.format('dd/mm/yyyy hh:mm:ss');
   
       // Registra o erro no arquivo de log
       logger.info(`${date} - Controller/partner.js - Erro ao inserir um novo parter - ${Error}`);
