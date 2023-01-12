@@ -1,5 +1,5 @@
 # API Rest em NodeJS
-Como parte de meus estudos, desenvolvi uma API REST baseada em Node.js que utiliza MySQL como banco de dados.
+Como parte de meus estudos, desenvolvi uma API RESTful  baseada em Node.js que utiliza MySQL como banco de dados.
 Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https://github.com/ZXVentures/ze-code-challenges/blob/master/backend.md) e me permitiu aprimorar diversas habilidades.
 
 ## DESCRIÇÃO
