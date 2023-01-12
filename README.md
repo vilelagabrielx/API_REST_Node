@@ -219,6 +219,6 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 - passo 5: Coloque as informações do banco de dados Mysql. A versão do MySQL utilizada neste projeto foi a 5.7.40.
 
--Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start"  
+- Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start"  
 
 As tabelas e procedures necessárias para a execução da API serão criadas automaticamente.
