@@ -61,9 +61,9 @@ A API oferece as seguintes funcionalidades:
   }
 }
 ```   
-   - Para atualização, é necessário realizar uma requisição do tipo *POST* na rota ***/updatePartner*** passando o ID do mesmo. No corpo da requisição, 
+   - Para atualização, é necessário realizar uma requisição do tipo *POST* na rota ***/updatepartner*** passando o ID do mesmo. No corpo da requisição, 
     é necessário que um JSON com todas as colunas, incluindo as que não serão modificadas seja passado, respeitando todas as regras anteriores.
-      - Exemplo de Request para Atualização dados de um usuário de ID 1 : ***http://localhost:3000/updatePartner/1***
+      - Exemplo de Request para Atualização dados de um usuário de ID 1 : ***http://localhost:3000/updatepartner/1***
     
 - Busca de parceiros próximos de um ponto(LATITUDE E LONGITUDE)
   - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getnearestpartnerbycoordenates***. No corpo da requisição, é necessário que um JSON no seguinte formato seja passado, onde "X" é a latitude e "Y" é a longitude:
