@@ -236,7 +236,7 @@ Para execução de um teste específico, é necessário que o código do mesmo s
 npx jest partner_get.teste.js 2
 ```  
 
-- ***npx jest npx jest partner_post.teste.js [DOCUMENTO]***: Teste da rota createapartner. Uma string, aqui chamada de documento, deve ser passado como argumento na execução. A seguir, exemplo de execução para o documento 71891633600. Após a execução, um usuário será inserido no banco com o documento passado.
+- ***npx jest npx jest partner_create.teste.js [DOCUMENTO]***: Teste da rota createapartner. Uma string, aqui chamada de documento, deve ser passado como argumento na execução. A seguir, exemplo de execução para o documento 71891633600. Após a execução, um usuário será inserido no banco com o documento passado.
 
 ```
 npx jest partner_post.teste.js 71891633600
