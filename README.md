@@ -209,16 +209,16 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 ## INSTALAÇÃO
 
-- Passo 1: Certifique-se que o NodeJS e o npm estão instalados. A versão do NodeJS utilizada neste projeto foi a v19.2.0 e a do npm 8.19.3
+- Passo 1: Certifique-se que o NodeJS e o npm estão instalados. A versão do NodeJS utilizada neste projeto foi a v19.2.0 e a do npm 8.19.3.
 
 - Passo 2: Clone este repositório.
 
 - Passo 3: Instale as dependencias usando o comando "npm install".
 
-- passo 4: Renomeie o arquivo ".env_exemplo",que se encontra na pasta "config", para ".env"
+- passo 4: Renomeie o arquivo ".env_exemplo",que se encontra na pasta "config", para ".env".
 
 - passo 5: Coloque as informações do banco de dados Mysql. A versão do MySQL utilizada neste projeto foi a 5.7.40.
 
-- Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start"  
+- Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start".
 
 As tabelas e procedures necessárias para a execução da API serão criadas automaticamente.
