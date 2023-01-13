@@ -239,7 +239,7 @@ npx jest partner_get.teste.js 2
 - ***npx jest npx jest partner_create.teste.js [DOCUMENTO]***: Teste da rota createapartner. Uma string, aqui chamada de documento, deve ser passado como argumento na execução. A seguir, exemplo de execução para o documento 71891633600. Após a execução, um usuário será inserido no banco com o documento passado.
 
 ```
-npx jest partner_post.teste.js 71891633600
+npx jest partner_create.teste.js 71891633600
 ```  
 - ***npx jest partner_delete.teste.js [ID]***: Teste da rota deleteapartner. É necessário que o ID seja um ID válido de um usuário que está cadastrado no banco de dados da aplicação. A seguir, exemplo de execução para o id 2
 
