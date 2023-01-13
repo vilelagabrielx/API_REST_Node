@@ -215,7 +215,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 - Passo 3: Instale as dependencias usando o comando "npm install".
 
-- passo 4: Renomeie o arquivo ".env_exemplo" para ".env"
+- passo 4: Renomeie o arquivo ".env_exemplo",que se encontra na pasta "config", para ".env"
 
 - passo 5: Coloque as informações do banco de dados Mysql. A versão do MySQL utilizada neste projeto foi a 5.7.40.
 
