@@ -222,3 +222,33 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 - Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start".
 
 As tabelas e procedures necessárias para a execução da API serão criadas automaticamente.
+
+## Testes Automatizados
+
+Para implementação dos testes automatizados, foi utilizada a biblioteca *Jest*. 
+
+Para execução de um teste específico, é necessário que o código do mesmo seja executado no terminal, no diretório em que foi feita a instalação da API. Abaixo, os codigos para cada um dos testes.
+
+- ***npx jest partner_get.teste.js [ID]***: Teste da rota getpartnerbyid. Um ID válido de um usuário que está cadastrado no banco de dados da aplicação deve ser passado como argumento na execução. A seguir, exemplo de execução para o id 2
+
+```
+npx jest partner_get.teste.js 2
+```  
+
+- ***npx jest npx jest partner_post.teste.js [DOCUMENTO]***: Teste da rota createapartner. Uma string, aqui chamada de documento, deve ser passado como argumento na execução. A seguir, exemplo de execução para o documento 71891633600. Após a execução, um usuário será inserido no banco com o documento passado.
+
+```
+npx jest partner_post.teste.js 71891633600
+```  
+- ***npx jest partner_delete.teste.js [ID]***: Teste da rota deleteapartner. Um ID válido de um usuário que está cadastrado no banco de dados da aplicação. A seguir, exemplo de execução para o id 2
+
+```
+npx jest partner_delete.teste.js 2
+```  
+
+- ***npx jest partner_getByCoord.teste [LATITUDE] [LONGITUDE]***: Teste da rota getnearestpartnerbycoordenates. Uma ponto válido de latitude e longitude deve ser passado, e é necessário que tenha um usuário cadastrado que tenha como área de cobertura o ponto passado. A seguir, exemplo de execução para o ponto -22.612008303216015 -43.70870182068599
+
+```
+npx jest partner_getByCoord.teste -22.612008303216015 -43.70870182068599
+```  
+
