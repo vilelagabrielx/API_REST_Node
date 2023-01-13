@@ -6,13 +6,13 @@ Este desafio foi proposto no repositório [ZXVentures/ze-code-challenges](https:
 
 No desafio citado, foi proposta a criação de um serviço que disponibilize uma API REST ou GraphQL que implemente as seguintes funcionalidas:
   
-    -Criação de novos parceiros em uma base de dados.
+    -Criação de novos usuários em uma base de dados.
   
-    -Carregamento de um parceiro pelo id.
+    -Carregamento de um usuário pelo id.
   
-    -Buscar o parceiro mais próximo, e que tenham área de atuação no ponto enviado pelas coordenadas.
+    -Buscar o usuário mais próximo, e que tenham área de atuação no ponto enviado pelas coordenadas.
   
- Alem das funcionalidades propostas, adicionei a possibilidade de deleção e atualização de um parceiro.
+ Alem das funcionalidades propostas, adicionei a possibilidade de deleção e atualização de um usuário.
  
 ## FUNCIONALIDADES
 
@@ -51,7 +51,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
         ***PONTOS IMPORTANTES***:
        - As coordenadas da ***coverageArea*** precisam ser um MultiPolygon válido respeitando o formato GeoJSON MultiPolygon (https://en.wikipedia.org/wiki/GeoJSON)
        - As coordenadas do ***address*** precisam ser um Ponto válido respeitando o formato GeoJSON Point (https://en.wikipedia.org/wiki/GeoJSON)
-       - A coluna ***document*** é chave única, desta forma, não podem existir 2 parceiros com o mesmo document no banco de dados.
+       - A coluna ***document*** é chave única, desta forma, não podem existir 2 usuários com o mesmo document no banco de dados.
 
 ```json
 {
@@ -131,8 +131,8 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 ```
     
-- Busca de parceiros próximos de um ponto(LATITUDE E LONGITUDE)
-  - Para realizar a busca de parceiro próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getNearestPartnerByCOORDENATES***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
+- Busca do usuário próximos de um ponto(LATITUDE E LONGITUDE)
+  - Para realizar a busca do usuário próximos de um ponto, é necessário realizar uma requisição do tipo *GET* na rota ***/getNearestPartnerByCOORDENATES***. No corpo da requisição, é necessário que um JSON no seguinte formato seja enviado, onde "X" é a latitude e "Y" é a longitude:
 ```json
 {
  "X": "-22.628472435058594",
@@ -140,7 +140,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 }
 
 ```
-  - Caso algum parceira tenha o ponto específico como área de cobertura, um JSON no seguinte formato é retornado:
+  - Caso algum usuário tenha o ponto específico como área de cobertura, um JSON no seguinte formato é retornado:
 ```json
 {
     "id": 2,
