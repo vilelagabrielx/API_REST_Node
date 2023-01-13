@@ -10,6 +10,8 @@ const routes = require('./src/routes/partner'); // Importa o módulo de rotas
 
 const moment = require('moment'); //importa a biblioteca de tratamento de tempos
 
+const daysWithLog = process.env.DAYS_WITH_LOGS
+
 const path = require('path');
 
 const fs = require('fs-extra');
@@ -18,9 +20,8 @@ function deleteOldFiles(pathtofolder)
   {
     // Define a data de ontem
     pathtofolder = process.cwd() + pathtofolder  
-    console.log(pathtofolder)
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - daysWithLog);
 
     // Obtém a lista de todos os arquivos na pasta
     const files = fs.readdirSync(pathtofolder);
