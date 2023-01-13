@@ -51,7 +51,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
         ***PONTOS IMPORTANTES***:
        - As coordenadas da ***coverageArea*** precisam ser um MultiPolygon válido respeitando o formato GeoJSON MultiPolygon (https://en.wikipedia.org/wiki/GeoJSON)
        - As coordenadas do ***address*** precisam ser um Ponto válido respeitando o formato GeoJSON Point (https://en.wikipedia.org/wiki/GeoJSON)
-       - A coluna ***document*** é chave única, desta forma, não podem existir 2 usuários com o mesmo document no banco de dados.
+       - A chave ***document*** é chave única, desta forma, não podem existir 2 usuários com o mesmo document no banco de dados.
 
 ```json
 {
