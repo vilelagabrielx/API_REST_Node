@@ -16,7 +16,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
  
 ## FUNCIONALIDADES
 
-- Busca de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyid*** passando o ID do usuário, os dados do mesmo,caso existam, são retornados em um JSON.
+- Busca de usuários por ID - Quando é feita uma requisição do tipo *GET* na rota ***/getpartnerbyid*** passando o ID do usuário, os dados do mesmo,caso existam, serão retornados em um JSON.
   - Exemplo de Request para obter dados de um usuário de ID 1 : ***http://localhost:3000/getpartnerbyID/1***
   
 - Formato do JSON obtido:
