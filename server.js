@@ -14,67 +14,78 @@ const path = require('path');
 
 const fs = require('fs-extra');
 
-function deleteOldFiles(pathtofolder) {
-  // Define a data de ontem
-  pathtofolder = process.cwd() + pathtofolder  
-  console.log(pathtofolder)
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+function deleteOldFiles(pathtofolder) 
+  {
+    // Define a data de ontem
+    pathtofolder = process.cwd() + pathtofolder  
+    console.log(pathtofolder)
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
-  // Obtém a lista de todos os arquivos na pasta
-  const files = fs.readdirSync(pathtofolder);
+    // Obtém a lista de todos os arquivos na pasta
+    const files = fs.readdirSync(pathtofolder);
 
-  // Percorre cada arquivo
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    // Obtém a data de modificação do arquivo
-    const stat = fs.statSync(path.join(pathtofolder, file));
-    const mtime = new Date(stat.mtime);
-    console.log(mtime)
-    // Verifica se o arquivo foi modificado antes de ontem
-    if (mtime < yesterday) {
-      // Verifica se é um arquivo de texto ou json
-      if (file.endsWith('.txt') || file.endsWith('.json')) {
-        // Apaga o arquivo
-        fs.unlinkSync(path.join(pathtofolder, file));
+    // Percorre cada arquivo
+    for (let i = 0; i < files.length; i++) 
+      {
+        const file = files[i];
+        // Obtém a data de modificação do arquivo
+        const stat = fs.statSync(path.join(pathtofolder, file));
+        const mtime = new Date(stat.mtime);
+        console.log(mtime)
+        // Verifica se o arquivo foi modificado antes de ontem
+        if (mtime < yesterday) 
+          {
+            // Verifica se é um arquivo de texto ou json
+            if (file.endsWith('.txt') || file.endsWith('.json')) 
+              {
+                // Apaga o arquivo
+                fs.unlinkSync(path.join(pathtofolder, file));
+              }
+          }
       }
-    }
   }
-}
 
 
 deleteOldFiles('\\logs')
 
 // Configura o logger para gravar os logs em arquivos separados diariamente, 
 //além de imprimir os logs no console
-const logger = winston.createLogger({
-  level: 'info', //nivel de log
+const logger = winston.createLogger
+  (
+    {
+      level: 'info', //nivel de log
 
-  transports: [
+      transports: 
+      [
 
-  new winston.transports.Console(), // cria uma nova instância de 
-                                    //um transporte de log para o winston, 
-                                    //especificamente um transporte de log para a consola (terminal). Isso significa que, quando o logger é usado para gravar mensagens, as mensagens serão exibidas na consola (terminal) também
+          new winston.transports.Console(), // cria uma nova instância de 
+                                            //um transporte de log para o winston, 
+                                            //especificamente um transporte de log para a consola (terminal). Isso significa que, quando o logger é usado para gravar mensagens, as mensagens serão exibidas na consola (terminal) também
 
 
-// é necessário instanciar o módulo winston e o DailyRotateFile juntos para que o 
-//winston possa utilizar as funcionalidades do DailyRotateFile para rotacionar os arquivos de 
-//log diariamente.
-                             
-  new DailyRotateFile({
+        // é necessário instanciar o módulo winston e o DailyRotateFile juntos para que o 
+        //winston possa utilizar as funcionalidades do DailyRotateFile para rotacionar os arquivos de 
+        //log diariamente.
+                                    
+          new DailyRotateFile
+            (
+                {
 
-    filename: 'log-%DATE%.txt',
-    datePattern: 'YYYY-MM-DD',
-    maxSize: '20m',
-    maxFiles: '1d',
-    dirname: 'logs',
-    zippedArchive: true,
-    maxDays: '14d',
-    cleanup: true
+                  filename: 'log-%DATE%.txt',
+                  datePattern: 'YYYY-MM-DD',
+                  maxSize: '20m',
+                  maxFiles: '1d',
+                  dirname: 'logs',
+                  zippedArchive: true,
+                  maxDays: '14d',
+                  cleanup: true
 
-                      })
-              ]
-});
+                }
+              )
+      ]
+    }
+  );
 
 
 
@@ -97,13 +108,14 @@ app.use(routes); //diz para a aplicação do Express utilizar essas rotas
 // Inicia o servidor na porta definida e exibe uma mensagem no console
 
 app.listen(PORT, () => {
-  // Cria uma instância do moment, que é usado para obter a data e hora atual
-  const agora = moment();
+              // Cria uma instância do moment, que é usado para obter a data e hora atual
+              const agora = moment();
 
-  // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"
-  const data = agora.format('dd/mm/yyyy hh:mm:ss');
+              // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"
+              const data = agora.format('dd/mm/yyyy hh:mm:ss');
 
- 
-  logger.info(`${data} - API iniciada com sucesso na porta ${PORT}`); // Grava uma mensagem de informação no arquivo de log 
-                                                                      //informando que a API foi iniciada com sucesso na porta especificada
-});
+            
+              logger.info(`${data} - API iniciada com sucesso na porta ${PORT}`); // Grava uma mensagem de informação no arquivo de log 
+                                                                                  //informando que a API foi iniciada com sucesso na porta especificada
+                        }
+        );
