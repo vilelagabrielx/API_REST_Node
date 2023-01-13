@@ -79,7 +79,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
  ```json
  {
   "tradingName": "cervejas",
-  "ownerName": "sonic do JORGE",
+  "ownerName": "teste",
   "document": "40028922",
   "coverageArea": { 
     "type": "MultiPolygon", 
