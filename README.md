@@ -10,7 +10,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
   
     -Carregamento de um usuário pelo id.
   
-    -Buscar o usuário mais próximo, e que tenham área de atuação no ponto enviado pelas coordenadas.
+    -Buscar o usuário mais próximo, e que tenham área de atuação no ponto enviado, pelas coordenadas deste ponto.
   
  Alem das funcionalidades propostas, adicionei a possibilidade de deleção e atualização de um usuário.
  
