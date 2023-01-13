@@ -402,7 +402,7 @@ async getNearestPartnerByCOORDENATES(X,Y)
           ad.type as partnerAdressType, 
           ad.coordinateX as partnerAdressX, 
           ad.coordinateY as partnerAdressY,
-          ST_Distance_Sphere(POINT(${Y}, ${X}), 
+          ST_Distance_Sphere(POINT(${X}, ${Y}), 
           POINT(ad.coordinateX, ad.coordinateY))/6371 as distance 
       FROM t_address ad
       inner join t_partner p on
