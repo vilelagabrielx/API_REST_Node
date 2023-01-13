@@ -241,7 +241,7 @@ npx jest partner_get.teste.js 2
 ```
 npx jest partner_post.teste.js 71891633600
 ```  
-- ***npx jest partner_delete.teste.js [ID]***: Teste da rota deleteapartner. Um ID válido de um usuário que está cadastrado no banco de dados da aplicação. A seguir, exemplo de execução para o id 2
+- ***npx jest partner_delete.teste.js [ID]***: Teste da rota deleteapartner. É necessário que o ID seja um ID válido de um usuário que está cadastrado no banco de dados da aplicação. A seguir, exemplo de execução para o id 2
 
 ```
 npx jest partner_delete.teste.js 2
@@ -252,4 +252,11 @@ npx jest partner_delete.teste.js 2
 ```
 npx jest partner_getByCoord.teste -22.612008303216015 -43.70870182068599
 ```  
+
+- ***npx jest partner_update.teste.js  [ID]***: Teste da rota updatepartner.  É necessário que o ID seja um ID válido de um usuário que está cadastrado no banco de dados da aplicação. A seguir, exemplo de execução para o id 2
+
+```
+npx jest partner_update.teste.js 2
+```  
+
 
