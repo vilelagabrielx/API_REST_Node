@@ -228,7 +228,7 @@ As tabelas e procedures necessárias para a execução da API serão criadas aut
 
 Para implementação dos testes automatizados, foi utilizada a biblioteca *Jest*. 
 
-Para execução de um teste específico, é necessário que o código do mesmo seja executado no terminal, no diretório em que foi feita a instalação da API. Abaixo, os codigos para cada um dos testes.
+Para funcionalidade dos testes, a aplicação precisa ter sido executado no mínimo uma vez. Para execução de um teste específico, é necessário que o código do mesmo seja executado no terminal, no diretório em que foi feita a instalação da API. Abaixo, os codigos para cada um dos testes.
 
 - ***npx jest partner_get.teste.js [ID]***: Teste da rota getpartnerbyid. Um ID válido de um usuário que está cadastrado no banco de dados da aplicação deve ser passado como argumento na execução. A seguir, exemplo de execução para o id 2
 
