@@ -250,7 +250,7 @@ async getPartnerByID(ID)
           // Executa a query e obtém o resultado
           const connection = await this.getConnection();
           const [rows, fields]  = await connection.query(sql,[ID]);
-
+            
           // RETORNA O JSON
           if (rows.length > 0) 
             {
@@ -364,6 +364,61 @@ async createUpdateProcedure(ID)
             throw error;
           }
   }
+
+  async createUpdateProcedure(ID) 
+    {
+      // Monta a query SQL de seleção de parceiro pelo documento
+      const sql = `
+
+      CREATE PROCEDURE  sp_atualiza_partner (	partneridpartner INT, 
+        partnertradingName varchar(500), 
+        partnerownerName varchar(500),
+        partnerdocument varchar(500),
+        addresscoordinateX varchar(50),
+        addresscoordinateY varchar(50),
+        coveragecordinateGeoJSON varchar(500)
+      )
+      BEGIN
+
+        UPDATE t_partner
+        set 
+          tradingName = partnertradingName,
+          ownerName   = partnerownerName,
+          document    = partnerdocument
+        where
+          Id  = partneridpartner;
+
+        UPDATE t_address
+        set 
+          coordinateX = addresscoordinateX,
+          coordinateY   = addresscoordinateY
+        where
+          idpartner  = partneridpartner;
+
+        UPDATE t_coverageArea
+        set
+          cordinateGeoJSON = coveragecordinateGeoJSON
+        WHERE 
+          idpartner = partneridpartner; 
+
+      END
+      `;
+
+      try 
+        {
+          // Executa a query e obtém o resultado
+          const connection = await this.getConnection();
+          const rows  = await connection.query(sql);
+          
+          return rows[0].affectedRows
+          // RETORNA O JSON
+        
+        } catch(error) 
+            {
+              // console.error(error);
+              throw error;
+            }
+    }
 
 async UpdatePartnerByID(ID,partnertradingName,partnerownerName,partnerdocument,addresscoordinateX,addresscoordinateY,coveragecordinateGeoJSON) 
   {
