@@ -67,13 +67,13 @@ class Partner
                 if (existingPartner != false) 
                   {
                     const rows = await db.UpdatePartnerByID(ID,tradingName,ownerName,document,address.coordinates[0],address.coordinates[1],JSON.stringify(coverageArea));
-                  
+                    return rows
                   }else
                     {
                       throw new Error(`Parceiro com este ID não encontrado`);
                     }
                   // Faz a busca no banco do parceiro por ID
-                return rows
+                
             } catch (Error) 
                 {
                     // Formata a data e hora atual como uma string no formato "dd/mm/yyyy hh:mm:ss"

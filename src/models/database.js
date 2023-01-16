@@ -1,5 +1,6 @@
 const mysql2 = require('mysql2/promise');
-
+require('dotenv').config({ path: './config/.env' });
+const database = process.env.DB_NAME;
 // A classe Database representa uma conexão com o banco de dados MySQL
 class Database {
   // O construtor da classe recebe os parâmetros de conexão com o banco de dados: host, usuário, senha e nome do banco de dados
@@ -348,15 +349,37 @@ async createUpdateProcedure(ID)
 
     END
     `;
-
+    const sql2 = 
+        `
+        SELECT 
+          COUNT(*) as count 
+        FROM information_schema.routines 
+        WHERE 
+          routine_schema = '${database}'
+        AND routine_name = 'sp_atualiza_partner'
+        AND routine_type = 'PROCEDURE'
+        `
+   
+      
     try 
       {
         // Executa a query e obtém o resultado
         const connection = await this.getConnection();
-        const rows  = await connection.query(sql);
+        const [procedure] = await connection.query(sql2)
+        if (procedure[0].count ===0)
+          {
+
+            const rows  = await connection.query(sql);
+            return rows[0].affectedRows
+          
+          }
+        else 
+          {
+           
+            return 0 
+          }
         
-        return rows[0].affectedRows
-        // RETORNA O JSON
+  
       
       } catch(error) 
           {
@@ -365,60 +388,7 @@ async createUpdateProcedure(ID)
           }
   }
 
-  async createUpdateProcedure(ID) 
-    {
-      // Monta a query SQL de seleção de parceiro pelo documento
-      const sql = `
-
-      CREATE PROCEDURE  sp_atualiza_partner (	partneridpartner INT, 
-        partnertradingName varchar(500), 
-        partnerownerName varchar(500),
-        partnerdocument varchar(500),
-        addresscoordinateX varchar(50),
-        addresscoordinateY varchar(50),
-        coveragecordinateGeoJSON varchar(500)
-      )
-      BEGIN
-
-        UPDATE t_partner
-        set 
-          tradingName = partnertradingName,
-          ownerName   = partnerownerName,
-          document    = partnerdocument
-        where
-          Id  = partneridpartner;
-
-        UPDATE t_address
-        set 
-          coordinateX = addresscoordinateX,
-          coordinateY   = addresscoordinateY
-        where
-          idpartner  = partneridpartner;
-
-        UPDATE t_coverageArea
-        set
-          cordinateGeoJSON = coveragecordinateGeoJSON
-        WHERE 
-          idpartner = partneridpartner; 
-
-      END
-      `;
-
-      try 
-        {
-          // Executa a query e obtém o resultado
-          const connection = await this.getConnection();
-          const rows  = await connection.query(sql);
-          
-          return rows[0].affectedRows
-          // RETORNA O JSON
-        
-        } catch(error) 
-            {
-              // console.error(error);
-              throw error;
-            }
-    }
+ 
 
 async UpdatePartnerByID(ID,partnertradingName,partnerownerName,partnerdocument,addresscoordinateX,addresscoordinateY,coveragecordinateGeoJSON) 
   {

@@ -68,6 +68,7 @@ const db = new Database(
                               }
         
         try {
+            
               await db.createPartnerTable(true);
 
             } catch (Error) {
@@ -96,11 +97,13 @@ const db = new Database(
                         logger.info(`${date} - Erro ao criar tabela de endereços - ${Error}`);
                             }
       try {
+       
             await db.createUpdateProcedure(true); 
 
       } catch (Error) {
                         if(Error.message == 'PROCEDURE sp_atualiza_partner already exists'){
                             //NÃO FAZ NADA.
+                           console.log(Error)
                         }
                         else{
                               date = now.format('dd/mm/yyyy hh:mm:ss');
