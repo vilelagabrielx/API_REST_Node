@@ -218,7 +218,7 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 - passo 4: Renomeie o arquivo ".env_exemplo",que se encontra na pasta "config", para ".env".
 
-- passo 5: Coloque as informações do banco de dados Mysql. A versão do MySQL utilizada neste projeto foi a 5.7.40.
+- passo 5: Coloque, no arquivo ".env" que está na pasta "config", as informações do banco de dados Mysql. A versão do MySQL utilizada neste projeto foi a 5.7.40.
 
 - Passo 6: Abra o terminal no diretório da aplicação e execute o comando "npm start".
 
