@@ -224,9 +224,9 @@ No desafio citado, foi proposta a criação de um serviço que disponibilize uma
 
 As tabelas e procedures necessárias para a execução da API serão criadas automaticamente.
 
-## Testes Automatizados
+## Testes unitários
 
-Para implementação dos testes automatizados, foi utilizada a biblioteca *Jest*. 
+Para implementação dos testes unitários, foi utilizada a biblioteca *Jest*. 
 
 Para funcionalidade dos testes, a aplicação precisa ter sido executado no mínimo uma vez. Para execução de um teste específico, é necessário que o código do mesmo seja executado no terminal, no diretório em que foi feita a instalação da API. Abaixo, os codigos para cada um dos testes.
 
