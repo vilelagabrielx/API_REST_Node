@@ -28,7 +28,7 @@ describe('POST /createapartner', () =>
                                 "Y" : `${Y}`
                             }
               const response = await request(app)
-              .get('/getNearestPartnerByCOORDENATES')
+              .post('/getNearestPartnerByCOORDENATES')
               .send(data)
               .expect(200);
               expect(response.status).toBe(200); // Verifica se o status da resposta é 200
