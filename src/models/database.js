@@ -121,24 +121,24 @@ class Database {
   // O método createPartner insere um novo registro na tabela t_partner
   // O método createPartner insere um novo registro na tabela t_partner
 async createPartner(tradingName, ownerName, document) 
-{
-    try 
-    {
-        // Monta a query SQL de inserção de novo parceiro
-      const sql = `INSERT INTO t_partner (tradingName, ownerName, document) 
-                        VALUES (?, ?, ?)`;
-        
-        // Executa a query e obtém o resultado
-      const connection = await this.getConnection();
-      const [result] = await connection.query(sql, [tradingName, ownerName, document]);
-
-      return result;
-    } catch(error) 
+  {
+      try 
       {
-        console.error(error);
-        throw error;
-      }
-}
+          // Monta a query SQL de inserção de novo parceiro
+        const sql = `INSERT INTO t_partner (tradingName, ownerName, document) 
+                          VALUES (?, ?, ?)`;
+          
+          // Executa a query e obtém o resultado
+        const connection = await this.getConnection();
+        const [result] = await connection.query(sql, [tradingName, ownerName, document]);
+
+        return result;
+      } catch(error) 
+        {
+          console.error(error);
+          throw error;
+        }
+  }
 // ------------------------
   // O método createCoverageArea insere um novo registro na tabela t_coverageArea
   async createCoverageArea(idpartner,type, cordinateGeoJSON) 

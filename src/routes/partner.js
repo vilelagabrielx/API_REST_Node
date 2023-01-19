@@ -155,7 +155,7 @@ router.get('/getpartnerbyid/:id', async (req, res) => {
  
                                                     });
 
-router.get('/getnearestpartnerbycoordenates', async (req, res) => {
+router.post('/getnearestpartnerbycoordenates', async (req, res) => {
   const X = req.body['X'];
   const Y =  req.body['Y'];
   
