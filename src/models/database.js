@@ -4,49 +4,43 @@ const database = process.env.DB_NAME;
 // A classe Database representa uma conexão com o banco de dados MySQL
 class Database {
   // O construtor da classe recebe os parâmetros de conexão com o banco de dados: host, usuário, senha e nome do banco de dados
-  constructor(host, user, password, database) 
-    {
-      this.host = host;
-      this.user = user;
-      this.password = password;
-      this.database = database;
-    }
+  constructor(host, user, password, database) {
+    this.host = host;
+    this.user = user;
+    this.password = password;
+    this.database = database;
+  }
 
   // O método getConnection retorna a conexão com o banco de dados
-  async getConnection() 
-    {
-        // Se a conexão já foi criada, retorna a conexão existente
-        if (this.connection) return this.connection;
+  async getConnection() {
+    // Se a conexão já foi criada, retorna a conexão existente
+    if (this.connection) return this.connection;
 
-        // Senão, cria uma nova conexão utilizando os parâmetros de conexão passados no construtor
-        this.connection = await mysql2.createPool
-        ({
-              host: this.host,
-              user: this.user,
-              password: this.password,
-              database: this.database
-          });
+    // Senão, cria uma nova conexão utilizando os parâmetros de conexão passados no construtor
+    this.connection = await mysql2.createPool({
+      host: this.host,
+      user: this.user,
+      password: this.password,
+      database: this.database,
+    });
 
-        // Retorna a conexão criada
-        return this.connection;
-    }
-  
-  async createPool()
-    {
-        this.connection = await mysql2.createPool
-        ({
-              host: this.host,
-              user: this.user,
-              password: this.password,
-              database: this.database
-        });
-    }
-  
+    // Retorna a conexão criada
+    return this.connection;
+  }
+
+  async createPool() {
+    this.connection = await mysql2.createPool({
+      host: this.host,
+      user: this.user,
+      password: this.password,
+      database: this.database,
+    });
+  }
+
   // O método createCoverageAreaTable cria a tabela t_coverageArea no banco de dados, se ela ainda não existir
-  async createCoverageAreaTable() 
-    {
-        // Cria a tabela t_coverageArea no banco de dados, se ela ainda não existir
-        const sql = `
+  async createCoverageAreaTable() {
+    // Cria a tabela t_coverageArea no banco de dados, se ela ainda não existir
+    const sql = `
           CREATE TABLE IF NOT EXISTS t_coverageArea (
             Id INTEGER AUTO_INCREMENT PRIMARY KEY,
             type TEXT NOT NULL,
@@ -55,139 +49,134 @@ class Database {
             FOREIGN KEY (idpartner) REFERENCES t_partner(Id) on DELETE CASCADE
           );
         `;
-      
-        try 
-          {
-            // Executa a query e obtém o resultado
-            const connection = await this.getConnection();
-            const [result] = await connection.query(sql);
-            return result;
-          } catch(error) 
-              {
-                console.error(error);
-                throw error;
-              }
+
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [result] = await connection.query(sql);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-// -------
+  }
+  // -------
   // O método createAddressTable cria a tabela t_address no banco de dados, se ela ainda não existir
-  async createAddressTable() 
-    {
-      const sql = `
+  async createAddressTable() {
+    const sql = `
         CREATE TABLE IF NOT EXISTS t_address ( 
           Id INTEGER AUTO_INCREMENT PRIMARY KEY, 
           type TEXT NOT NULL, 
           coordinateX TEXT NOT NULL, 
           coordinateY TEXT NOT NULL, 
           idpartner INTEGER, 
-          FOREIGN KEY (idpartner) REFERENCES t_partner(Id) on DELETE CASCADE );` ;
-      
-      try 
-        {
-          // Obtém a conexão com o banco de dados
-          const connection = await this.getConnection();
-          // Executa a query e obtém o resultado
-          const [result] = await connection.query(sql);
-          return result;
-        } catch(error) 
-            {
-                console.error(error);
-                throw error;
-            }
+          FOREIGN KEY (idpartner) REFERENCES t_partner(Id) on DELETE CASCADE );`;
+
+    try {
+      // Obtém a conexão com o banco de dados
+      const connection = await this.getConnection();
+      // Executa a query e obtém o resultado
+      const [result] = await connection.query(sql);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
+  }
   // ----------------
 
   // O método createPartnerTable cria a tabela t_partner no banco de dados, se ela ainda não existir
-  async createPartnerTable() 
-    {
-      const sql = `
+  async createPartnerTable() {
+    const sql = `
       CREATE TABLE IF NOT EXISTS t_partner ( 
           Id INTEGER AUTO_INCREMENT PRIMARY KEY, 
           tradingName TEXT NOT NULL, 
           ownerName TEXT NOT NULL, 
-          document TEXT NOT NULL );` ;
-      
-      try 
-        {
-          const connection = await this.getConnection();
-          const [result] = await connection.query(sql);
-          return result;
-        } catch (error) 
-          {
-            console.error(error);
-            throw error;
-          }
+          document TEXT NOT NULL );`;
+
+    try {
+      const connection = await this.getConnection();
+      const [result] = await connection.query(sql);
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-
-  // O método createPartner insere um novo registro na tabela t_partner
-  // O método createPartner insere um novo registro na tabela t_partner
-async createPartner(tradingName, ownerName, document) 
-  {
-      try 
-      {
-          // Monta a query SQL de inserção de novo parceiro
-        const sql = `INSERT INTO t_partner (tradingName, ownerName, document) 
-                          VALUES (?, ?, ?)`;
-          
-          // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const [result] = await connection.query(sql, [tradingName, ownerName, document]);
-
-        return result;
-      } catch(error) 
-        {
-          console.error(error);
-          throw error;
-        }
   }
-// ------------------------
+
+  // O método createPartner insere um novo registro na tabela t_partner
+  // O método createPartner insere um novo registro na tabela t_partner
+  async createPartner(tradingName, ownerName, document) {
+    try {
+      // Monta a query SQL de inserção de novo parceiro
+      const sql = `INSERT INTO t_partner (tradingName, ownerName, document) 
+                          VALUES (?, ?, ?)`;
+
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [result] = await connection.query(sql, [
+        tradingName,
+        ownerName,
+        document,
+      ]);
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  // ------------------------
   // O método createCoverageArea insere um novo registro na tabela t_coverageArea
-  async createCoverageArea(idpartner,type, cordinateGeoJSON) 
-    {
-      // Monta a query SQL de inserção de nova área de cobertura
-      const sql = `
+  async createCoverageArea(idpartner, type, cordinateGeoJSON) {
+    // Monta a query SQL de inserção de nova área de cobertura
+    const sql = `
         INSERT INTO t_coverageArea (type,cordinateGeoJSON, idpartner)
         VALUES (?, ?, ?)
       `;
-    
-      try 
-        {
-          // Executa a query e obtém o resultado
-          const connection = await this.getConnection();
-          const [result] = await connection.query(sql, [type, cordinateGeoJSON, idpartner]);
-      
-          return result;
-        } catch(error) 
-            {
-              console.error(error);
-              throw error;
-            }
+
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [result] = await connection.query(sql, [
+        type,
+        cordinateGeoJSON,
+        idpartner,
+      ]);
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-   // O método createCoverageArea insere um novo registro na tabela t_coverageArea
-   async createAdress(idpartner,type, coordinateX, coordinateY) 
-   {
-        try 
-          {
-            // Monta a query SQL de inserção de nova área de cobertura
-            const sql = `
+  }
+  // O método createCoverageArea insere um novo registro na tabela t_coverageArea
+  async createAdress(idpartner, type, coordinateX, coordinateY) {
+    try {
+      // Monta a query SQL de inserção de nova área de cobertura
+      const sql = `
               INSERT INTO t_address (type, coordinateX, coordinateY, idpartner)
               VALUES (?, ?, ?, ?)
             `;
-        
-            // Executa a query e obtém o resultado
-            const connection = await this.getConnection();
-            const [result] = await connection.query(sql, [type, coordinateX, coordinateY, idpartner]);
-        
-            // Retorna o ID do novo registro criado
-            return result.insertId;
-          } catch(error) 
-            {
-              console.error(error);
-              throw error;
-            }
+
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [result] = await connection.query(sql, [
+        type,
+        coordinateX,
+        coordinateY,
+        idpartner,
+      ]);
+
+      // Retorna o ID do novo registro criado
+      return result.insertId;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-async getPartnerByDocument(document) 
-  {
+  async getPartnerByDocument(document) {
     // Monta a query SQL de seleção de parceiro pelo documento
     const sql = `
       SELECT *
@@ -195,39 +184,34 @@ async getPartnerByDocument(document)
       WHERE document = ?
     `;
 
-    try 
-      {
-        // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const [rows] = await connection.query(sql, [document]);
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [rows] = await connection.query(sql, [document]);
 
-        // Verifica se o resultado possui algum registro
-        if (rows.length > 0) 
-          {
-            // Caso exista, retorna o objeto com existingPartner: true e os dados do parceiro
-            return {
-              existingPartner: true,
-              partner: rows[0]
-            }
-          } else 
-              {
-                // Caso contrário, retorna o objeto com existingPartner: false e dados vazios
-                return {
-                  existingPartner: false,
-                  partner: {}
-                }
-              }
-        } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+      // Verifica se o resultado possui algum registro
+      if (rows.length > 0) {
+        // Caso exista, retorna o objeto com existingPartner: true e os dados do parceiro
+        return {
+          existingPartner: true,
+          partner: rows[0],
+        };
+      } else {
+        // Caso contrário, retorna o objeto com existingPartner: false e dados vazios
+        return {
+          existingPartner: false,
+          partner: {},
+        };
+      }
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
 
-async getPartnerByID(ID) 
-  {
-      // Monta a query SQL de seleção de parceiro pelo documento
-      const sql = `
+  async getPartnerByID(ID) {
+    // Monta a query SQL de seleção de parceiro pelo documento
+    const sql = `
       select 
         tradingName ,
         ownerName ,
@@ -246,73 +230,60 @@ async getPartnerByID(ID)
       WHERE 
         tp.Id = ?`;
 
-      try 
-        {
-          // Executa a query e obtém o resultado
-          const connection = await this.getConnection();
-          const [rows, fields]  = await connection.query(sql,[ID]);
-            
-          // RETORNA O JSON
-          if (rows.length > 0) 
-            {
-              const data = 
-                {
-                    "id":ID, 
-                    "tradingName": rows[0].tradingName,
-                    "ownerName": rows[0].ownerName,
-                    "document": rows[0].document,
-                    "coverageArea": { 
-                      "type": rows[0].coverageAreaType, 
-                      "coordinates": rows[0].coordinates, 
-                    },
-                    "address": { 
-                      "type": rows[0].addressType,
-                      "coordinates": [rows[0].addresscoordinateX, rows[0].addresscoordinateY]
-                    }
-                }
-              return data
-            }
-          else
-            {
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [rows, fields] = await connection.query(sql, [ID]);
 
-             return false
-
-            }
-        
-        } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+      // RETORNA O JSON
+      if (rows.length > 0) {
+        const data = {
+          id: ID,
+          tradingName: rows[0].tradingName,
+          ownerName: rows[0].ownerName,
+          document: rows[0].document,
+          coverageArea: {
+            type: rows[0].coverageAreaType,
+            coordinates: rows[0].coordinates,
+          },
+          address: {
+            type: rows[0].addressType,
+            coordinates: [
+              rows[0].addresscoordinateX,
+              rows[0].addresscoordinateY,
+            ],
+          },
+        };
+        return data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
 
-
-
-async DeletePartnerByID(ID) 
-  {
+  async DeletePartnerByID(ID) {
     // Monta a query SQL de seleção de parceiro pelo documento
     const sql = `
     DELETE FROM t_partner WHERE id = ${ID};
     `;
 
-    try 
-      {
-        // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const rows  = await connection.query(sql);
-        
-        return rows[0].affectedRows
-        // RETORNA O JSON
-      
-      } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const rows = await connection.query(sql);
+
+      return rows[0].affectedRows;
+      // RETORNA O JSON
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
 
-async createUpdateProcedure(ID) 
-  {
+  async createUpdateProcedure(ID) {
     // Monta a query SQL de seleção de parceiro pelo documento
     const sql = `
 
@@ -349,8 +320,7 @@ async createUpdateProcedure(ID)
 
     END
     `;
-    const sql2 = 
-        `
+    const sql2 = `
         SELECT 
           COUNT(*) as count 
         FROM information_schema.routines 
@@ -358,63 +328,52 @@ async createUpdateProcedure(ID)
           routine_schema = '${database}'
         AND routine_name = 'sp_atualiza_partner'
         AND routine_type = 'PROCEDURE'
-        `
-   
-      
-    try 
-      {
-        // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const [procedure] = await connection.query(sql2)
-        if (procedure[0].count ===0)
-          {
+        `;
 
-            const rows  = await connection.query(sql);
-            return rows[0].affectedRows
-          
-          }
-        else 
-          {
-           
-            return 0 
-          }
-        
-  
-      
-      } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [procedure] = await connection.query(sql2);
+      if (procedure[0].count === 0) {
+        const rows = await connection.query(sql);
+        return rows[0].affectedRows;
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
 
- 
-
-async UpdatePartnerByID(ID,partnertradingName,partnerownerName,partnerdocument,addresscoordinateX,addresscoordinateY,coveragecordinateGeoJSON) 
-  {
+  async UpdatePartnerByID(
+    ID,
+    partnertradingName,
+    partnerownerName,
+    partnerdocument,
+    addresscoordinateX,
+    addresscoordinateY,
+    coveragecordinateGeoJSON,
+  ) {
     // Monta a query SQL de seleção de parceiro pelo documento
     const sql = `
     call sp_atualiza_partner(${ID},"${partnertradingName}","${partnerownerName}","${partnerdocument}","${addresscoordinateX}","${addresscoordinateY}",'${coveragecordinateGeoJSON}')
     `;
-    console.log(sql)
-    try 
-      {
-        // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const rows  = await connection.query(sql);
-        
-        return rows[0].affectedRows
-        // RETORNA O JSON
-      
-      } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+    console.log(sql);
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const rows = await connection.query(sql);
+
+      return rows[0].affectedRows;
+      // RETORNA O JSON
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
 
-async getNearestPartnerByCOORDENATES(X,Y) 
-  {
+  async getNearestPartnerByCOORDENATES(X, Y) {
     // Monta a query SQL de seleção de parceiro pelo documento
     const sql = `
       SELECT 
@@ -441,54 +400,41 @@ async getNearestPartnerByCOORDENATES(X,Y)
       LIMIT 1;
       `;
 
-    try 
-      {
-        // Executa a query e obtém o resultado
-        const connection = await this.getConnection();
-        const [rows, fields]  = await connection.query(sql);
+    try {
+      // Executa a query e obtém o resultado
+      const connection = await this.getConnection();
+      const [rows, fields] = await connection.query(sql);
 
-        // RETORNA O JSON
-        if (rows.length > 0) 
-            {
-              const data = 
-                {
-                    "id":rows[0].partnerID, 
-                    "tradingName": rows[0].tradingName,
-                    "ownerName": rows[0].ownerName,
-                    "document": rows[0].document,
-                    "coverageArea": { 
-                      "type": rows[0].coverageAreaType, 
-                      "coordinates": rows[0].coordinates,
-                    },
-                    "address": { 
-                      "type": rows[0].partnerAdressType,
-                      "coordinates": [rows[0].partnerAdressX, rows[0].partnerAdressY]
-                    },
-                    "distance":{
-                    "Kilometers": rows[0].distance,
-                    "Meters":  (rows[0].distance)*1000 ,
-                    "Earth radius considered(Meters)" : 6371 
-                    } 
-                }
-              return data
-            }
-        else
-          {
-            return false
-          }
-      
-      } catch(error) 
-          {
-            // console.error(error);
-            throw error;
-          }
+      // RETORNA O JSON
+      if (rows.length > 0) {
+        const data = {
+          id: rows[0].partnerID,
+          tradingName: rows[0].tradingName,
+          ownerName: rows[0].ownerName,
+          document: rows[0].document,
+          coverageArea: {
+            type: rows[0].coverageAreaType,
+            coordinates: rows[0].coordinates,
+          },
+          address: {
+            type: rows[0].partnerAdressType,
+            coordinates: [rows[0].partnerAdressX, rows[0].partnerAdressY],
+          },
+          distance: {
+            Kilometers: rows[0].distance,
+            Meters: rows[0].distance * 1000,
+            'Earth radius considered(Meters)': 6371,
+          },
+        };
+        return data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      // console.error(error);
+      throw error;
+    }
   }
-
-
-
-
-
-
 }
 
 module.exports = Database;
