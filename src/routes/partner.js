@@ -50,11 +50,6 @@ const logger = winston.createLogger({
   ],
 });
 
-// Cria uma rota para a URL raiz, que responde a requisições do tipo GET
-router.get('/', (req, res) => {
-  // Envia a mensagem "Olá, mundo!" como resposta à requisição
-  res.send('Olá, mundo!');
-});
 
 // Cria uma rota POST para o caminho '/createapartner'
 //Assim como solicitado no item 1.1.
@@ -164,7 +159,7 @@ router.post('/getnearestpartnerbycoordenates', async (req, res) => {
   }
 });
 
-router.get('/deleteapartner/:id', async (req, res) => {
+router.delete('/deleteapartner/:id', async (req, res) => {
   const ID = req.params.id;
   try {
     const deletepartner = new Deletepartner();
@@ -183,7 +178,7 @@ router.get('/deleteapartner/:id', async (req, res) => {
   }
 });
 
-router.post('/updatepartner/:id', async (req, res) => {
+router.put('/updatepartner/:id', async (req, res) => {
   const ID = req.params.id;
   try {
     const getPartner = new GetPartner(ID);

@@ -13,7 +13,7 @@ const ID = process.argv[3];
 app.use(router); // Usa o arquivo de rotas importado para as rotas da aplicação
 ///
 //TESTE DA ROTA createapartner
-describe('POST /updatepartner', () => {
+describe('PUT /updatepartner', () => {
   // Descrição do teste
 
   it('Verifica a rota de update', async () => {
@@ -50,7 +50,7 @@ describe('POST /updatepartner', () => {
       },
     };
     const response = await request(app)
-      .post(`/updatepartner/${ID}`)
+      .put(`/updatepartner/${ID}`)
       .send(data)
       .expect(200);
     // Verifica se o corpo da resposta é igual ao esperado
